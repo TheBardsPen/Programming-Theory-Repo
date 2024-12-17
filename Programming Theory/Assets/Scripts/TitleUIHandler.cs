@@ -2,10 +2,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using UnityEngine.SceneManagement;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+
+/// <summary>
+/// Handles title menu UI interactions
+/// </summary>
 
 public class TitleUIHandler : MonoBehaviour
 {
