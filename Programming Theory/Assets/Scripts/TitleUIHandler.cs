@@ -1,7 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using NUnit.Framework;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -29,8 +32,16 @@ public class TitleUIHandler : MonoBehaviour
 
     public void NewGame()
     {
+
         // Code to launch character creation scene
-        SceneManager.LoadScene("CharacterCreation");
+        //SceneManager.LoadScene("CharacterCreation");
+
+        //
+        //Debug
+        //
+        DataManager.instance.availableDungeons.Add("add1");
+        DataManager.instance.availableDungeons.Add("add2");
+        SceneManager.LoadScene("Town");
     }
 
     public void Continue()

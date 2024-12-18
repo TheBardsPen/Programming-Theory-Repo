@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CharacterCreation.unity
     guid: 4c6fd715d7f7efd4abdd53c50f97070d
+  - enabled: 1
+    path: Assets/Scenes/Town.unity
+    guid: 75775d654dfe59140b833315bba7be6f
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
