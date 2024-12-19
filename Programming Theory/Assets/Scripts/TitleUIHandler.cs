@@ -36,9 +36,13 @@ public class TitleUIHandler : MonoBehaviour
         // Code to launch character creation scene
         //SceneManager.LoadScene("CharacterCreation");
 
-        //
-        //Debug
-        //
+        //          //
+        //          //
+        //          //
+        //   DEBUG  //
+        //          //
+        //          //
+        //          //
         SceneManager.LoadScene("Town");
     }
 

@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using Unity.Hierarchy;
 using TMPro;
-using System;
 using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
@@ -19,10 +18,15 @@ public class GameUIHandler : MonoBehaviour
 {
     [SerializeField] GameObject mainSplash;
     [SerializeField] GameObject exitConfirm;
+    [SerializeField] TextMeshProUGUI playerName;
+    [SerializeField] TextMeshProUGUI statsDisplay;
 
     [SerializeField] List<GameObject> dungeonButtons = new List<GameObject>();
     [SerializeField] List<GameObject> townButtons = new List<GameObject>();
     [SerializeField] List<GameObject> townSubButtons = new List<GameObject>();
+    [SerializeField] List<GameObject> questList = new List<GameObject>();
+
+    private GameObject tempPanel;
 
     void Awake()
     {
@@ -30,16 +34,40 @@ public class GameUIHandler : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        // Handle all realtime updates
+
+        // Set player stats info
+        playerName.text = DataManager.instance.player.name;
+        statsDisplay.text =
+            $"{DataManager.instance.player.level}\r\n" +
+            $"{DataManager.instance.player.playerClass}\r\n\r\n" +
+            $"{DataManager.instance.player.maxHealth}\r\n" +
+            $"{DataManager.instance.player.maxMana}\r\n\r\n" +
+            $"{DataManager.instance.player.strength}\r\n" +
+            $"{DataManager.instance.player.dexterity}\r\n" +
+            $"{DataManager.instance.player.constitution}\r\n" +
+            $"{DataManager.instance.player.intelligence}\r\n" +
+            $"{DataManager.instance.player.wisdom}\r\n" +
+            $"{DataManager.instance.player.charisma}\r\n";
+
+    }
+
     public void SplashSelect(GameObject splash)
     {
-        // Handles splash menus opening and closing
+
+        // Handles splash menus opening and closing and remembers what side panel was open to reopen
         if (!splash.activeSelf)
         {
+            tempPanel = GameObject.FindGameObjectWithTag("Side Panel");
+            tempPanel.SetActive(false);
             mainSplash.SetActive(false);
             splash.SetActive(true);
         }
         else if (splash.activeSelf)
         {
+            tempPanel.SetActive(true);
             mainSplash.SetActive(true);
             splash.SetActive(false);
         }
@@ -48,23 +76,23 @@ public class GameUIHandler : MonoBehaviour
     public void SidePanelSelect(GameObject sidePanel)
     {
         // Handles side panel selection
-        if (sidePanel.activeSelf)
+        if (!sidePanel.activeSelf)
         {
-            return;
-        }
-        else if (!sidePanel.activeSelf) 
-        {
-            foreach (var item in GameObject.FindGameObjectsWithTag("Side Panel"))
+            foreach (GameObject item in GameObject.FindGameObjectsWithTag("Side Panel"))
             {
                 item.SetActive(false);
             }
             sidePanel.SetActive(true);
+        }
+        else if (sidePanel.activeSelf) 
+        {
+            
         } 
     }
 
     public void DungeonList()
     {
-        // Creates list of available dungeons to the save file active
+        // Creates list of available dungeons from the save file active
         for (int i = 0; i < DataManager.instance.availableDungeons.Count; i++)
         {
             dungeonButtons[i].SetActive(true);
@@ -74,7 +102,7 @@ public class GameUIHandler : MonoBehaviour
 
     public void TownList()
     {
-        // Creates list of available towns to the save file active
+        // Creates list of available towns from the save file active
         // Deacctivates all available sub location buttons on panel open
         foreach (GameObject item in townSubButtons)
         {
@@ -100,6 +128,24 @@ public class GameUIHandler : MonoBehaviour
         {
             townSubButtons[i].SetActive(true);
             townSubButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = DataManager.instance.availableTowns[townIndex].subs[i];
+        }
+    }
+
+    public void QuestList()
+    {
+        foreach (GameObject item in questList)
+        {
+            item.SetActive(false);
+        }
+
+        for (int i = 0; i < DataManager.instance.availableQuests.Count; i++)
+        {
+            questList[i].SetActive(true);
+            questList[i].GetComponentInChildren<TextMeshProUGUI>().text =
+                $"{DataManager.instance.availableQuests[i].type}\r\n" +
+                $"{DataManager.instance.availableQuests[i].giver}\r\n" +
+                $"{DataManager.instance.availableQuests[i].target}\r\n" +
+                $"{DataManager.instance.availableQuests[i].acquireCount}/{DataManager.instance.availableQuests[i].targetCount}";
         }
     }
 
@@ -163,10 +209,14 @@ public class GameUIHandler : MonoBehaviour
         SceneManager.LoadScene("Title");
     }
 
-    // debug code
-    //
-    //
-    //
+    //          //
+    //          //
+    //          //
+    //   DEBUG  //
+    //          //
+    //          //
+    //          //
+
     public void DiscoverDungeon()
     {
         DataManager.instance.availableDungeons.Add(new DataManager.Dungeon { name = "New Dungeon", level = 10 });
@@ -180,5 +230,44 @@ public class GameUIHandler : MonoBehaviour
     public void AddSubLocation()
     {
         DataManager.instance.availableTowns[0].subs.Add("New Sub");
+    }
+
+    public void AddQuestMonster()
+    {
+        DataManager.instance.availableQuests.Add(new DataManager.Quest 
+        { 
+            type = "Bounty",
+            giver = "Tom",
+            target = "goblins",
+            targetCount = Random.Range(6, 12),
+            gold = Random.Range(50, 100)
+        });
+    }
+
+    public void AddQuestItem()
+    {
+        DataManager.instance.availableQuests.Add(new DataManager.Quest
+        {
+            type = "Harvest",
+            giver = "Carol",
+            target = "Bear Skin",
+            targetCount = Random.Range(6, 12),
+            gold = Random.Range(50, 100)
+        });
+    }
+
+    public void StatAssign()
+    {
+        DataManager.instance.player.name = "Toby";
+        DataManager.instance.player.level = 3;
+        DataManager.instance.player.playerClass = "Warrior";
+        DataManager.instance.player.maxHealth = 100;
+        DataManager.instance.player.maxMana = 20;
+        DataManager.instance.player.strength = 9;
+        DataManager.instance.player.dexterity = 3;
+        DataManager.instance.player.constitution = 8;
+        DataManager.instance.player.intelligence = 4;
+        DataManager.instance.player.wisdom = 4;
+        DataManager.instance.player.charisma = 5;
     }
 }

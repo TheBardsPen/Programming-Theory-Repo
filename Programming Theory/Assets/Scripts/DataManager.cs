@@ -12,6 +12,25 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager instance;
 
+    public class Player
+    {
+        public string name;
+        public int level;
+        public string playerClass;
+        public int health;
+        public int maxHealth;
+        public int mana;
+        public int maxMana;
+        public int strength;
+        public int dexterity;
+        public int constitution;
+        public int intelligence;
+        public int wisdom;
+        public int charisma;
+    }
+
+    public Player player = new Player();
+
     public struct Town
     {
         public string name;
@@ -22,9 +41,20 @@ public class DataManager : MonoBehaviour
         public string name;
         public int level;
     }
+
+    public struct Quest
+    {
+        public string type;
+        public string giver;
+        public string target;
+        public int targetCount;
+        public int acquireCount;
+        public int gold;
+    }
     
     public List<Town> availableTowns = new List<Town>();
     public List<Dungeon> availableDungeons = new List<Dungeon>();
+    public List<Quest> availableQuests = new List<Quest>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
