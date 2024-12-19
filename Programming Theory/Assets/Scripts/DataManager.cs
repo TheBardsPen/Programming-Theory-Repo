@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System;
 
 /// <summary>
 /// Handles all data saving between scenes and sessions
@@ -10,8 +12,19 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager instance;
 
-    public List<string> availableTowns = new List<string>();
-    public List<string> availableDungeons = new List<string>();
+    public struct Town
+    {
+        public string name;
+        public List<string> subs;
+    }
+    public struct Dungeon
+    {
+        public string name;
+        public int level;
+    }
+    
+    public List<Town> availableTowns = new List<Town>();
+    public List<Dungeon> availableDungeons = new List<Dungeon>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

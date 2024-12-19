@@ -39,8 +39,6 @@ public class TitleUIHandler : MonoBehaviour
         //
         //Debug
         //
-        DataManager.instance.availableDungeons.Add("add1");
-        DataManager.instance.availableDungeons.Add("add2");
         SceneManager.LoadScene("Town");
     }
 
