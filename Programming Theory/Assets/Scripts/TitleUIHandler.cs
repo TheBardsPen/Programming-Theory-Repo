@@ -1,9 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
-using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using NUnit.Framework;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -43,7 +41,23 @@ public class TitleUIHandler : MonoBehaviour
         //          //
         //          //
         //          //
+
+        DataManager.instance.player.name = "Toby";
+        DataManager.instance.player.level = 3;
+        DataManager.instance.player.playerClass = "Warrior";
+        DataManager.instance.player.health = 100;
+        DataManager.instance.player.maxHealth = 100;
+        DataManager.instance.player.mana = 20;
+        DataManager.instance.player.maxMana = 20;
+        DataManager.instance.player.strength = 9;
+        DataManager.instance.player.dexterity = 3;
+        DataManager.instance.player.constitution = 8;
+        DataManager.instance.player.intelligence = 4;
+        DataManager.instance.player.wisdom = 4;
+        DataManager.instance.player.charisma = 5;
+
         SceneManager.LoadScene("Town");
+
     }
 
     public void Continue()

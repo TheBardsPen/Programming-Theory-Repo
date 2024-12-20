@@ -1,8 +1,5 @@
 using UnityEngine;
-using System.IO;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System;
 
 /// <summary>
 /// Handles all data saving between scenes and sessions
@@ -17,10 +14,10 @@ public class DataManager : MonoBehaviour
         public string name;
         public int level;
         public string playerClass;
-        public int health;
-        public int maxHealth;
-        public int mana;
-        public int maxMana;
+        public float health;
+        public float maxHealth;
+        public float mana;
+        public float maxMana;
         public int strength;
         public int dexterity;
         public int constitution;
@@ -51,7 +48,10 @@ public class DataManager : MonoBehaviour
         public int acquireCount;
         public int gold;
     }
-    
+
+    public string location;
+    public string subLocation;
+
     public List<Town> availableTowns = new List<Town>();
     public List<Dungeon> availableDungeons = new List<Dungeon>();
     public List<Quest> availableQuests = new List<Quest>();

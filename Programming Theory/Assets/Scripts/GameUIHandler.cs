@@ -1,8 +1,7 @@
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
-using Unity.Hierarchy;
 using TMPro;
 using UnityEngine.SceneManagement;
 
@@ -16,10 +15,20 @@ using UnityEditor;
 
 public class GameUIHandler : MonoBehaviour
 {
+    public static GameUIHandler instance;
+
     [SerializeField] GameObject mainSplash;
     [SerializeField] GameObject exitConfirm;
+
+    [SerializeField] TextMeshProUGUI location;
+    [SerializeField] TextMeshProUGUI subLocation;
+
     [SerializeField] TextMeshProUGUI playerName;
     [SerializeField] TextMeshProUGUI statsDisplay;
+    [SerializeField] TextMeshProUGUI hpText;
+    [SerializeField] TextMeshProUGUI mpText;
+    [SerializeField] Scrollbar hpBar;
+    [SerializeField] Scrollbar mpBar;
 
     [SerializeField] List<GameObject> dungeonButtons = new List<GameObject>();
     [SerializeField] List<GameObject> townButtons = new List<GameObject>();
@@ -27,6 +36,7 @@ public class GameUIHandler : MonoBehaviour
     [SerializeField] List<GameObject> questList = new List<GameObject>();
 
     private GameObject tempPanel;
+    private string townSelected;
 
     void Awake()
     {
@@ -34,9 +44,26 @@ public class GameUIHandler : MonoBehaviour
 
     }
 
+    private void Start()
+    {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+        DontDestroyOnLoad(gameObject);
+    }
+
     private void Update()
     {
         // Handle all realtime updates
+
+        // Set location and sublocation text
+        location.text = DataManager.instance.location;
+        subLocation.text = DataManager.instance.subLocation;
 
         // Set player stats info
         playerName.text = DataManager.instance.player.name;
@@ -52,22 +79,32 @@ public class GameUIHandler : MonoBehaviour
             $"{DataManager.instance.player.wisdom}\r\n" +
             $"{DataManager.instance.player.charisma}\r\n";
 
+        // Set HP & MP gui
+        hpText.text = $"{DataManager.instance.player.health}/{DataManager.instance.player.maxHealth}";
+        mpText.text = $"{DataManager.instance.player.mana}/{DataManager.instance.player.maxMana}";
+        hpBar.size = DataManager.instance.player.health / DataManager.instance.player.maxHealth;
+        mpBar.size = DataManager.instance.player.mana / DataManager.instance.player.maxMana;
     }
 
     public void SplashSelect(GameObject splash)
     {
-
         // Handles splash menus opening and closing and remembers what side panel was open to reopen
         if (!splash.activeSelf)
         {
-            tempPanel = GameObject.FindGameObjectWithTag("Side Panel");
-            tempPanel.SetActive(false);
+            if (GameObject.FindGameObjectsWithTag("Side Panel").Length > 0)
+            {
+                tempPanel = GameObject.FindGameObjectWithTag("Side Panel");
+                tempPanel.SetActive(false);
+            }            
             mainSplash.SetActive(false);
             splash.SetActive(true);
         }
         else if (splash.activeSelf)
         {
-            tempPanel.SetActive(true);
+            if (tempPanel != null)
+            {
+                tempPanel.SetActive(true);
+            }            
             mainSplash.SetActive(true);
             splash.SetActive(false);
         }
@@ -84,10 +121,10 @@ public class GameUIHandler : MonoBehaviour
             }
             sidePanel.SetActive(true);
         }
-        else if (sidePanel.activeSelf) 
+        else if (sidePanel.activeSelf)
         {
-            
-        } 
+
+        }
     }
 
     public void DungeonList()
@@ -98,6 +135,12 @@ public class GameUIHandler : MonoBehaviour
             dungeonButtons[i].SetActive(true);
             dungeonButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = DataManager.instance.availableDungeons[i].name;
         }
+    }
+
+    public void DungeonSelect(int index)
+    {
+        DataManager.instance.location = dungeonButtons[index].GetComponentInChildren<TextMeshProUGUI>().text;
+        DataManager.instance.subLocation = null;
     }
 
     public void TownList()
@@ -118,6 +161,8 @@ public class GameUIHandler : MonoBehaviour
 
     public void DisplayTownSubLocations(int townIndex)
     {
+        townSelected = DataManager.instance.availableTowns[townIndex].name;
+
         // Creates list of available sub locations in each town
         foreach (GameObject item in townSubButtons)
         {
@@ -129,6 +174,12 @@ public class GameUIHandler : MonoBehaviour
             townSubButtons[i].SetActive(true);
             townSubButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = DataManager.instance.availableTowns[townIndex].subs[i];
         }
+    }
+
+    public void TownSelect(int index)
+    {
+        DataManager.instance.location = townSelected;
+        DataManager.instance.subLocation = townSubButtons[index].GetComponentInChildren<TextMeshProUGUI>().text;
     }
 
     public void QuestList()
@@ -206,7 +257,8 @@ public class GameUIHandler : MonoBehaviour
 
     public void MainMenu()
     {
-        SceneManager.LoadScene("Title");
+        SceneManager.LoadSceneAsync("Title");
+        Destroy(gameObject);
     }
 
     //          //
@@ -219,12 +271,22 @@ public class GameUIHandler : MonoBehaviour
 
     public void DiscoverDungeon()
     {
-        DataManager.instance.availableDungeons.Add(new DataManager.Dungeon { name = "New Dungeon", level = 10 });
+        int count = new int();
+        foreach (DataManager.Dungeon item in DataManager.instance.availableDungeons)
+        {
+            count++;
+        }
+        DataManager.instance.availableDungeons.Add(new DataManager.Dungeon { name = $"Dungeon {count}", level = 10 });
     }
 
     public void AddTown()
     {
-        DataManager.instance.availableTowns.Add(new DataManager.Town { name = "New Town", subs = new List<string> { "City Center", "Hotel" } });
+        int count = new int();
+        foreach (DataManager.Town item in DataManager.instance.availableTowns)
+        {
+            count++;
+        }
+        DataManager.instance.availableTowns.Add(new DataManager.Town { name = $"Town {count}", subs = new List<string>() });
     }
 
     public void AddSubLocation()
@@ -234,8 +296,8 @@ public class GameUIHandler : MonoBehaviour
 
     public void AddQuestMonster()
     {
-        DataManager.instance.availableQuests.Add(new DataManager.Quest 
-        { 
+        DataManager.instance.availableQuests.Add(new DataManager.Quest
+        {
             type = "Bounty",
             giver = "Tom",
             target = "goblins",
@@ -256,18 +318,13 @@ public class GameUIHandler : MonoBehaviour
         });
     }
 
-    public void StatAssign()
+    public void HealthChange(int amount)
     {
-        DataManager.instance.player.name = "Toby";
-        DataManager.instance.player.level = 3;
-        DataManager.instance.player.playerClass = "Warrior";
-        DataManager.instance.player.maxHealth = 100;
-        DataManager.instance.player.maxMana = 20;
-        DataManager.instance.player.strength = 9;
-        DataManager.instance.player.dexterity = 3;
-        DataManager.instance.player.constitution = 8;
-        DataManager.instance.player.intelligence = 4;
-        DataManager.instance.player.wisdom = 4;
-        DataManager.instance.player.charisma = 5;
+        DataManager.instance.player.health += amount;
+    }
+
+    public void ManaChange(int amount)
+    {
+        DataManager.instance.player.mana += amount;
     }
 }
