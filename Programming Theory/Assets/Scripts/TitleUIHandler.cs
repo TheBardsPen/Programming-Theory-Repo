@@ -30,19 +30,8 @@ public class TitleUIHandler : MonoBehaviour
 
     public void NewGame()
     {
-
         // Code to launch character creation scene
-        //SceneManager.LoadScene("CharacterCreation");
-
-        //          //
-        //          //
-        //          //
-        //   DEBUG  //
-        //          //
-        //          //
-        //          //
-        SceneManager.LoadScene("Town");
-
+        SceneManager.LoadScene("CharacterCreation");
     }
 
     public void Continue()
