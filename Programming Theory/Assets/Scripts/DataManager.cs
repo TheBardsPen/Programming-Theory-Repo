@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public class DataManager : MonoBehaviour
 {
     public static DataManager instance;
+    public string savePath = "/test";
 
     public class Player
     {
@@ -28,7 +29,22 @@ public class DataManager : MonoBehaviour
 
     // DELETE ON CHARACTER CREATION
     //
-    public Player player = new Player();
+    public Player player = new Player()
+    {
+        name = "Carl",
+        level = 1,
+        playerClass = "Warrior",
+        maxHealth= 100,
+        health = 100,
+        maxMana = 10,
+        mana = 10,
+        strength = 10,
+        dexterity = 8,
+        constitution = 10,
+        intelligence = 6,
+        wisdom = 4,
+        charisma = 6,
+    };
     //
     //
 

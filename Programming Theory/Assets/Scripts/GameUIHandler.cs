@@ -4,10 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.SceneManagement;
-
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
 
 /// <summary>
 /// Handles user interaction on the game screen
