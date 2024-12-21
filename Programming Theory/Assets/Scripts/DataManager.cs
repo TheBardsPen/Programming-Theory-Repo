@@ -26,7 +26,11 @@ public class DataManager : MonoBehaviour
         public int charisma;
     }
 
+    // DELETE ON CHARACTER CREATION
+    //
     public Player player = new Player();
+    //
+    //
 
     public struct Town
     {
@@ -92,7 +96,7 @@ public class DataManager : MonoBehaviour
     public void Save(int index)
     {
         // Code for manual saving data
-
+        
     }
 
     public void Load(int index)

@@ -35,7 +35,6 @@ public class GameUIHandler : MonoBehaviour
     [SerializeField] List<GameObject> townSubButtons = new List<GameObject>();
     [SerializeField] List<GameObject> questList = new List<GameObject>();
 
-    private GameObject tempPanel;
     private string townSelected;
 
     void Awake()
@@ -90,21 +89,12 @@ public class GameUIHandler : MonoBehaviour
     {
         // Handles splash menus opening and closing and remembers what side panel was open to reopen
         if (!splash.activeSelf)
-        {
-            if (GameObject.FindGameObjectsWithTag("Side Panel").Length > 0)
-            {
-                tempPanel = GameObject.FindGameObjectWithTag("Side Panel");
-                tempPanel.SetActive(false);
-            }            
+        {           
             mainSplash.SetActive(false);
             splash.SetActive(true);
         }
         else if (splash.activeSelf)
-        {
-            if (tempPanel != null)
-            {
-                tempPanel.SetActive(true);
-            }            
+        {           
             mainSplash.SetActive(true);
             splash.SetActive(false);
         }
@@ -326,5 +316,10 @@ public class GameUIHandler : MonoBehaviour
     public void ManaChange(int amount)
     {
         DataManager.instance.player.mana += amount;
+    }
+
+    public void AddPotion()
+    {
+        
     }
 }
