@@ -708,6 +708,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eddc5c5d8b1adc45be333ff36d5ba79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 11400000, guid: e195182a0e8ea8046bf303e5abd3cf4e, type: 2}
   classScreen: {fileID: 1022481538}
   acceptScreen: {fileID: 1608965686}
   statsScreen: {fileID: 486229427}

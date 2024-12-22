@@ -40,17 +40,19 @@ public class TitleUIHandler : MonoBehaviour
 
     }
 
-    public void LoadSaveFile()
+    public void LoadSaveFile(int saveIndex)
     {
         // Code to open save menu to pick load data
-        if (!loadGameSplash.activeSelf)
-        {
-            loadGameSplash.SetActive(true);
-        }
-        else
-        {
-            loadGameSplash.SetActive(false);
-        }
+        //if (!loadGameSplash.activeSelf)
+        //{
+        //    loadGameSplash.SetActive(true);
+        //}
+        //else
+        //{
+        //    loadGameSplash.SetActive(false);
+        //}
+
+        DataManager.instance.Load(saveIndex);
     }
 
     public void OptionsMenu()

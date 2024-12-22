@@ -1,5 +1,9 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Handles all data saving between scenes and sessions
@@ -8,54 +12,20 @@ using System.Collections.Generic;
 public class DataManager : MonoBehaviour
 {
     public static DataManager instance;
-    public string savePath = "/test";
+    private string savePath;
 
-    public class Player
+    public PlayerObject player;
+    public InventoryObject inventory;
+    public TownInventoryObject townInventory;
+    public DungeonInventoryObject dungeonInventory;
+    public QuestInventoryObject questInventory;
+
+    private void Awake()
     {
-        public string name;
-        public int level;
-        public string playerClass;
-        public float health;
-        public float maxHealth;
-        public float mana;
-        public float maxMana;
-        public int strength;
-        public int dexterity;
-        public int constitution;
-        public int intelligence;
-        public int wisdom;
-        public int charisma;
+        savePath = $"{Application.dataPath}/Saves";
     }
 
-    public Player player = new Player();
     
-    public struct Town
-    {
-        public string name;
-        public List<string> subs;
-    }
-    public struct Dungeon
-    {
-        public string name;
-        public int level;
-    }
-
-    public struct Quest
-    {
-        public string type;
-        public string giver;
-        public string target;
-        public int targetCount;
-        public int acquireCount;
-        public int gold;
-    }
-
-    public string location;
-    public string subLocation;
-
-    public List<Town> availableTowns = new List<Town>();
-    public List<Dungeon> availableDungeons = new List<Dungeon>();
-    public List<Quest> availableQuests = new List<Quest>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -71,11 +41,19 @@ public class DataManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void OnApplicationQuit()
+    {
+        inventory.container.Clear();
+        questInventory.container.Clear();
+        townInventory.container.Clear();
+        dungeonInventory.container.Clear();
+        player.container = null;
+    }
+
     [System.Serializable]
     class SaveData
     {
-        // Variables for saving
-
+        
     }
 
     public void AutoSave()
@@ -90,16 +68,33 @@ public class DataManager : MonoBehaviour
 
     }
 
-    public void Save(int index)
+    public void Save(int saveIndex)
     {
-        // Code for manual saving data
-        
+        // Check for directory of index
+        if (!Directory.Exists($"{savePath}/{saveIndex}"))
+        {
+            Directory.CreateDirectory($"{savePath}/{saveIndex}");
+        }
+
+        // Save inventory per player
+        inventory.Save($"{savePath}/{saveIndex}/Inv");
     }
 
-    public void Load(int index)
+    public void Load(int saveIndex)
     {
-        // Code for manual loading data
-
+        // Code for manual loading player data
+        
+        // Load inventory per player
+        if (File.Exists($"{savePath}/{saveIndex}/Inv"))
+        {
+            inventory.Load($"{savePath}/{saveIndex}/Inv");
+        }
+        //
+        //
+        // Debug for loading
+        //
+        //
+        SceneManager.LoadScene("Town");
     }
 
     public void PreferencesLoad()

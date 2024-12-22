@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class CharacterCreation : MonoBehaviour
 {
+    public PlayerObject player;
+
     public GameObject classScreen;
     public GameObject acceptScreen;
     public GameObject statsScreen;
@@ -16,55 +18,13 @@ public class CharacterCreation : MonoBehaviour
     public TMP_Dropdown classInput;
 
     private List<string> _playerClassSelect = new List<string>();
-    private List<DataManager.Player> playerClassSelect = new List<DataManager.Player>
+    private List<Player> playerClassSelect = new List<Player>
     {
-        new DataManager.Player()
-        {
-            playerClass = "Warrior",
-            level = 1,
-            maxHealth = 100,
-            health = 100,
-            maxMana = 10,
-            mana = 10,
-            strength = 10,
-            dexterity = 8,
-            constitution = 10,
-            intelligence = 6,
-            wisdom = 4,
-            charisma = 6,
-        },
+        new Player(null, 1, "Warrior", 100, 100, 10, 10, 10, 8, 10, 6, 4, 6, 0),
 
-        new DataManager.Player()
-        {
-            playerClass = "Rogue",
-            level = 1,
-            maxHealth = 80,
-            health = 80,
-            maxMana = 12,
-            mana = 12,
-            strength = 7,
-            dexterity = 10,
-            constitution = 8,
-            intelligence = 7,
-            wisdom = 5,
-            charisma = 8,
-        },
+        new Player(null, 1, "Rogue", 80, 80, 12, 12, 7, 10, 8, 7, 5, 8, 0),
 
-        new DataManager.Player()
-        {
-            playerClass = "Mage",
-            level = 1,
-            maxHealth = 60,
-            health = 60,
-            maxMana = 20,
-            mana = 20,
-            strength = 4,
-            dexterity = 6,
-            constitution = 5,
-            intelligence = 8,
-            wisdom = 10,
-            charisma = 7,
-        }
+        new Player(null, 1, "Mage", 60, 60, 20, 20, 4, 6, 5, 8, 10, 7, 0)
     };
 
     private void Awake()
@@ -81,7 +41,7 @@ public class CharacterCreation : MonoBehaviour
 
     public void NameSubmit()
     {
-        DataManager.instance.player.name = nameInput.text;
+        player.container.name = nameInput.text;
         if (classScreen.GetComponent<CanvasGroup>().alpha == 0)
         {
             classScreen.GetComponent<FadeObject>().FadeInObject();
@@ -90,8 +50,8 @@ public class CharacterCreation : MonoBehaviour
 
     public void ClassSelect()
     {
-        DataManager.instance.player = playerClassSelect[classInput.value];
-        DataManager.instance.player.name = nameInput.text;
+        player.container = playerClassSelect[classInput.value];
+        player.container.name = nameInput.text;
         if (acceptScreen.GetComponent<CanvasGroup>().alpha == 0)
         {
             statsScreen.GetComponent<FadeObject>().FadeInObject();
@@ -106,17 +66,17 @@ public class CharacterCreation : MonoBehaviour
 
     private void Update()
     {
-        nameField.text = DataManager.instance.player.name;
+        nameField.text = player.container.name;
         statsField.text =
-            $"{DataManager.instance.player.level}\r\n" +
-            $"{DataManager.instance.player.playerClass}\r\n\r\n" +
-            $"{DataManager.instance.player.maxHealth}\r\n" +
-            $"{DataManager.instance.player.maxMana}\r\n\r\n" +
-            $"{DataManager.instance.player.strength}\r\n" +
-            $"{DataManager.instance.player.dexterity}\r\n" +
-            $"{DataManager.instance.player.constitution}\r\n" +
-            $"{DataManager.instance.player.intelligence}\r\n" +
-            $"{DataManager.instance.player.wisdom}\r\n" +
-            $"{DataManager.instance.player.charisma}\r\n";
+            $"{player.container.level}\r\n" +
+            $"{player.container.playerClass}\r\n\r\n" +
+            $"{player.container.maxHealth}\r\n" +
+            $"{player.container.maxMana}\r\n\r\n" +
+            $"{player.container.strength}\r\n" +
+            $"{player.container.dexterity}\r\n" +
+            $"{player.container.constitution}\r\n" +
+            $"{player.container.intelligence}\r\n" +
+            $"{player.container.wisdom}\r\n" +
+            $"{player.container.charisma}\r\n";
     }
 }

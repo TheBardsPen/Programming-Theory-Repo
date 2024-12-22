@@ -30,24 +30,24 @@ public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
                 return;
             }
         }
-            container.Add(new InventorySlot(database.getId[_item], _item, _amount));
+        container.Add(new InventorySlot(database.getId[_item], _item, _amount));
     }
 
     public void Save(string savePath)
     {
         string saveData = JsonUtility.ToJson(this, true);
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(string.Concat(Application.dataPath, savePath));
+        FileStream file = File.Create(savePath);
         bf.Serialize(file, saveData);
         file.Close();
     }
 
     public void Load(string savePath)
     {
-        if (File.Exists(string.Concat(Application.dataPath, savePath)))
+        if (File.Exists(savePath))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(string.Concat(Application.dataPath, savePath), FileMode.Open);
+            FileStream file = File.Open(savePath, FileMode.Open);
             JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(), this);
             file.Close();
         }
