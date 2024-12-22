@@ -8,7 +8,6 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
 public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
 {
-    public string savePath;
     private ItemDataBaseObject database;
     public List<InventorySlot> container = new List<InventorySlot>();
 
@@ -34,7 +33,7 @@ public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
             container.Add(new InventorySlot(database.getId[_item], _item, _amount));
     }
 
-    public void Save()
+    public void Save(string savePath)
     {
         string saveData = JsonUtility.ToJson(this, true);
         BinaryFormatter bf = new BinaryFormatter();
@@ -43,7 +42,7 @@ public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
         file.Close();
     }
 
-    public void Load()
+    public void Load(string savePath)
     {
         if (File.Exists(string.Concat(Application.dataPath, savePath)))
         {

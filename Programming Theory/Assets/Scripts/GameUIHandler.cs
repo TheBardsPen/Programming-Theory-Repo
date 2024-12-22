@@ -14,6 +14,8 @@ public class GameUIHandler : MonoBehaviour
 {
     public static GameUIHandler instance;
 
+    public InventoryObject inventory;
+
     [SerializeField] GameObject mainSplash;
     [SerializeField] GameObject exitConfirm;
 
