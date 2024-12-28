@@ -16,6 +16,6 @@ public class WeaponObject : ItemObject
 
     private void Awake()
     {
-        type = ItemType.Weapon;
+        type = ItemType.Weapons;
     }
 }

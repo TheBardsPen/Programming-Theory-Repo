@@ -9,6 +9,6 @@ public class ConsumableObject : ItemObject
 
     private void Awake()
     {
-        type = ItemType.Consumable;
+        type = ItemType.Consumables;
     }
 }

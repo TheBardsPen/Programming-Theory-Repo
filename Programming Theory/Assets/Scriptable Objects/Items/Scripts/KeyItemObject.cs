@@ -5,6 +5,6 @@ public class KeyItemObject : ItemObject
 {
     private void Awake()
     {
-        type = ItemType.KeyItem;
+        type = ItemType.KeyItems;
     }
 }

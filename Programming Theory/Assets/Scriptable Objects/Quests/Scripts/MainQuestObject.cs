@@ -1,10 +1,12 @@
+using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Main Quest Object", menuName = "Quest/Main Quest")]
-public class MainQuestObject : QuestObject
+[System.Serializable]
+[CreateAssetMenu(fileName = "New Main Quest", menuName = "Quest/Main Quest")]
+public class MainQuestObject : ScriptableObject
 {
-    private void Awake()
-    {
-        type = QuestType.Main;
-    }
+    public GameObject prefabPanel;
+    public int goldReward;
+    [TextArea(15, 10)]
+    public string description;
 }

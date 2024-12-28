@@ -1,16 +1,27 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Dungeon Inventory", menuName = "Data Manager/Dungeon Inventory")]
 public class DungeonInventoryObject : ScriptableObject, ISerializationCallbackReceiver
 {
+    private DungeonDatabaseObject database;
     public List<DungeonSlot> container = new List<DungeonSlot>();
 
-    public void AddDungeon(DungeonObject location)
+    private void OnEnable()
     {
-        container.Add(new DungeonSlot(location));
+#if UNITY_EDITOR
+        database = (DungeonDatabaseObject)AssetDatabase.LoadAssetAtPath("Assets/Resources/Dungeon Database.asset", typeof(DungeonDatabaseObject));
+#else
+        database = Resources.Load<TownDatabaseObject>("Dungeon Database");
+#endif
+    }
+
+    public void AddDungeon(DungeonObject dungeon)
+    {
+        container.Add(new DungeonSlot(database.GetId[dungeon], dungeon));
     }
 
     public void Save(string savePath)
@@ -35,7 +46,10 @@ public class DungeonInventoryObject : ScriptableObject, ISerializationCallbackRe
 
     public void OnAfterDeserialize()
     {
-
+        for (int i = 0; i < container.Count; i++)
+        {
+            container[i].dungeon = database.GetDungeon[container[i].ID];
+        }
     }
 
     public void OnBeforeSerialize()
@@ -47,10 +61,12 @@ public class DungeonInventoryObject : ScriptableObject, ISerializationCallbackRe
 [System.Serializable]
 public class DungeonSlot
 {
-    public LocationObject location;
+    public int ID;
+    public DungeonObject dungeon;
 
-    public DungeonSlot(LocationObject _location)
+    public DungeonSlot(int _id, DungeonObject _dungeon)
     {
-        location = _location;
+        ID = _id;
+        dungeon = _dungeon;
     }
 }

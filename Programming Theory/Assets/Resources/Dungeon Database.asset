@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05e13a3dca9acee49b03dc369e592f3c, type: 3}
+  m_Name: Dungeon Database
+  m_EditorClassIdentifier: 
+  Dungeons:
+  - {fileID: 11400000, guid: 1ea256b359bf2c74ca1f1d790be7283f, type: 2}
+  - {fileID: 11400000, guid: 8e99714d1c2e3834f99172f03624bb5d, type: 2}
+  - {fileID: 11400000, guid: d503de8352ed75f4f9898515681484a9, type: 2}
+  - {fileID: 11400000, guid: 583dacc3034bd874bb109c5b05c0446d, type: 2}
+  - {fileID: 11400000, guid: f654edfeafbd4fe4a8bfc7156f063fe0, type: 2}
+  - {fileID: 11400000, guid: 64c59c35f07d4bd4a9cc0ab4b56207d7, type: 2}
+  - {fileID: 11400000, guid: 8ffcdf41e2d07a842ba17e7017048b44, type: 2}
+  - {fileID: 11400000, guid: 61b7205204ac0a1429b26792df3c46ea, type: 2}
+  - {fileID: 11400000, guid: ac7406c98cae82d469ec5417d3d0447d, type: 2}
+  - {fileID: 11400000, guid: 63f1c9c7cd1ae0547adeb5bbb6607866, type: 2}
+  - {fileID: 11400000, guid: 1caadf8332486394889f9d6b4f2c0529, type: 2}
+  - {fileID: 11400000, guid: e0fc12ec84461f041b448b34c01bab20, type: 2}
+  - {fileID: 11400000, guid: f13c01da30c1c5347810026e934d3b2c, type: 2}
+  - {fileID: 11400000, guid: 07e3b2aeec267df4f89f6f070840583a, type: 2}
+  - {fileID: 11400000, guid: 5930d6c5e8ebb3041b7ed3b0cbf93c9f, type: 2}
+  - {fileID: 11400000, guid: 7216fa7ab02af094ea553d1a5c69a55e, type: 2}

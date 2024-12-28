@@ -2,11 +2,11 @@ using UnityEngine;
 
 public enum ItemType
 {
-    Consumable,
-    Weapon,
+    Consumables,
+    Weapons,
     Armor,
-    Accessory,
-    KeyItem,
+    Accessories,
+    KeyItems,
     Default
 }
 

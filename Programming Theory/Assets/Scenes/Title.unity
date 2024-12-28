@@ -227,11 +227,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a243bd4bc95af44a9159e494bdf29bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasAutoSave: 0
   player: {fileID: 11400000, guid: e195182a0e8ea8046bf303e5abd3cf4e, type: 2}
   inventory: {fileID: 11400000, guid: b28729a103cd4a64e9bebbaff686eeeb, type: 2}
   townInventory: {fileID: 11400000, guid: be8e6d5657c59824c9932e0f330fbb54, type: 2}
   dungeonInventory: {fileID: 11400000, guid: 890a596c6065efa4d8957c346f8ec2bd, type: 2}
-  questInventory: {fileID: 11400000, guid: 3c379055a67ca784a94fc8c0e28391bd, type: 2}
+  mainQuestInventory: {fileID: 11400000, guid: 2a40f8a71b5462c4a8ff1afe8cefb9d2, type: 2}
+  sideQuestInventory: {fileID: 11400000, guid: e811955099e72f646acf0a72d544b1d8, type: 2}
 --- !u!4 &102326263
 Transform:
   m_ObjectHideFlags: 0
@@ -790,7 +792,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 149248528432349279, guid: 0a3cb6dd90bc3e6498a07d99890bbf9b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 149248528432349279, guid: 0a3cb6dd90bc3e6498a07d99890bbf9b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -802,7 +804,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 149248528432349279, guid: 0a3cb6dd90bc3e6498a07d99890bbf9b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadSaveFile
+      value: DebugLoad
       objectReference: {fileID: 0}
     - target: {fileID: 149248528432349279, guid: 0a3cb6dd90bc3e6498a07d99890bbf9b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEditor;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
 public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
@@ -14,9 +13,9 @@ public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
     private void OnEnable()
     {
 #if UNITY_EDITOR
-        database = (ItemDataBaseObject)AssetDatabase.LoadAssetAtPath("Assets/Resources/Database.asset", typeof(ItemDataBaseObject));
+        database = (ItemDataBaseObject)AssetDatabase.LoadAssetAtPath("Assets/Resources/Item Database.asset", typeof(ItemDataBaseObject));
 #else
-        database = Resources.Load<ItemDataBaseObject>("Database");
+        database = Resources.Load<ItemDataBaseObject>("Item Database");
 #endif
     }
 

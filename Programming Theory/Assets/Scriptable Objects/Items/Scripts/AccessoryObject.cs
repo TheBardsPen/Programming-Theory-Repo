@@ -17,6 +17,6 @@ public class AccessoryObject : ItemObject
 
     private void Awake()
     {
-        type = ItemType.Accessory;
+        type = ItemType.Accessories;
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Dungeon Object", menuName = "Locations/Dungeon")]
 public class DungeonObject : LocationObject
 {
-    public int enemyLevel;
+    public int level;
 
     private void Awake()
     {

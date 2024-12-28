@@ -1,24 +1,39 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Town Inventory", menuName = "Data Manager/Town Inventory")]
 public class TownInventoryObject : ScriptableObject, ISerializationCallbackReceiver
 {
+    private TownDatabaseObject database;
     public List<TownSlot> container = new List<TownSlot>();
+
+    private void OnEnable()
+    {
+#if UNITY_EDITOR
+        database = (TownDatabaseObject)AssetDatabase.LoadAssetAtPath("Assets/Resources/Town Database.asset", typeof(TownDatabaseObject));
+#else
+        database = Resources.Load<TownDatabaseObject>("Town Database");
+#endif
+    }
 
     public void AddTown(TownObject _town, string _sub)
     {
+        List<string> strings = new List<string>();
+
         for (int i = 0; i < container.Count; i++)
         {
-            if (container[i].location == _town)
+            if (container[i].town == _town)
             {
                 container[i].AddSublocation(_sub);
                 return;
             }
         }
-        container.Add(new TownSlot(_town, new List<string>() { _sub }));
+        var obj = new TownSlot(database.GetId[_town], _town, _sub);
+        container.Add(obj);
     }
 
     public void Save(string savePath)
@@ -43,7 +58,10 @@ public class TownInventoryObject : ScriptableObject, ISerializationCallbackRecei
 
     public void OnAfterDeserialize()
     {
-
+        for (int i = 0;i < container.Count; i++)
+        {
+            container[i].town = database.GetTown[container[i].ID];
+        }
     }
 
     public void OnBeforeSerialize()
@@ -55,17 +73,22 @@ public class TownInventoryObject : ScriptableObject, ISerializationCallbackRecei
 [System.Serializable]
 public class TownSlot
 {
-    public LocationObject location;
+    public int ID;
+    public TownObject town;
     public List<string> subLocations = new List<string>();
 
-    public TownSlot(LocationObject _location, List<string> _subLocations)
+    public TownSlot(int _id, TownObject _town, string _sub)
     {
-        location = _location;
-        subLocations = _subLocations;
+        ID = _id;
+        town = _town;
+        AddSublocation(_sub);
     }
 
-    public void AddSublocation(string loc)
+    public void AddSublocation(string _sub)
     {
-        subLocations.Add(loc);
+        if (!subLocations.Contains(_sub))
+        {
+            subLocations.Add(_sub);
+        }
     }
 }
