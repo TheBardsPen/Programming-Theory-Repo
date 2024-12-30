@@ -19,6 +19,9 @@ public class DataManager : MonoBehaviour
     public DungeonInventoryObject dungeonInventory; // Discovered dungeon list
     public MainQuestInventoryObject mainQuestInventory; // Main quests currently active for the player
     public SideQuestInventoryObject sideQuestInventory; // Side quests currently active for the player
+    public NPCRelations npcRelations; // NPC relationships for the active player
+
+    public LocationObject currentLocation;
 
     private void Awake()
     {
@@ -78,6 +81,7 @@ public class DataManager : MonoBehaviour
         sideQuestInventory.container.Clear();
         townInventory.container.Clear();
         dungeonInventory.container.Clear();
+        npcRelations.container.Clear();
         player.container = null;
     }
 
@@ -125,6 +129,8 @@ public class DataManager : MonoBehaviour
         mainQuestInventory.Save($"{savePath}/{saveIndex}/Quest");
         // Save active side quest list
         sideQuestInventory.Save($"{savePath}/{saveIndex}/Side Quest");
+        // Save npc relations
+        npcRelations.Save($"{savePath}/{saveIndex}/NPC");
     }
 
     public void Load(string saveIndex)
@@ -158,6 +164,10 @@ public class DataManager : MonoBehaviour
         if (File.Exists($"{savePath}/{saveIndex}/Side Quest"))
         {
             sideQuestInventory.Load($"{savePath}/{saveIndex}/Side Quest");
+        }
+        if (File.Exists($"{savePath}/{saveIndex}/NPC"))
+        {
+            npcRelations.Load($"{savePath}/{saveIndex}/NPC");
         }
     }
 

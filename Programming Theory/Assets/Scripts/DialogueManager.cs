@@ -9,14 +9,11 @@ using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
-    public static DialogueManager instance;
-
-    
     public GameObject textBox;
     public GameObject choiceButon;
     public GameObject choicePanel;
     public TMP_InputField textInput;
-    public bool isAwaitingInput;
+    public bool isAwaitingInput = false;
     public bool isTalking = false;
 
     public Story story;
@@ -26,10 +23,11 @@ public class DialogueManager : MonoBehaviour
     List<string> tags;
     static string choiceSelected;
 
+    private NPCController controller;
+
     // Start is called before the first frame update
     void Awake()
     {
-        instance = this;
         namePlate = textBox.transform.GetChild(0).gameObject;
         nametag = textBox.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         message = textBox.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
@@ -39,23 +37,28 @@ public class DialogueManager : MonoBehaviour
 
     private void Start()
     {
-        if (instance.story.canContinue)
-        {
-            AdvanceDialogue();
-        }
+        
     }
 
     private void Update()
     {
-        if (isAwaitingInput)
+        if (story != null)
         {
-
+            if (story.canContinue)
+            {
+                while (story.currentText == "\n")
+                {
+                    AdvanceDialogue();
+                }
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.Space))
+        
+        if (Input.GetKeyDown(KeyCode.Space) && story.currentChoices.Count == 0)
         {
             //Is there more to the story?
             if (story.canContinue)
             {
+
                 AdvanceDialogue();
 
                 //Are there any choices?
@@ -71,16 +74,53 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    public void StartDialogue(NPCController _controller)
+    {
+        for (int i = 0; i < choicePanel.transform.childCount; i++)
+        {
+            choicePanel.transform.GetChild(i).gameObject.SetActive(false);
+        }
+
+        controller = _controller;
+
+        namePlate.SetActive(true);
+
+        DataManager.instance.npcRelations.AddNPC(controller.npc);
+        story = new Story(controller.npc.story.text);
+
+        // Set story variables from local
+        story.variablesState["player_name"] = DataManager.instance.player.container.name;
+        story.variablesState["player_class"] = DataManager.instance.player.container.playerClass;
+        story.variablesState["relationship"] = controller.relationship;
+        story.variablesState["isQuestActive"] = controller.isQuestActive;
+
+        if (story != null)
+        {
+            if (story.canContinue)
+            {
+                AdvanceDialogue();
+            }
+        }
+    }
+
     // Finished the Story (Dialogue)
     private void FinishDialogue()
     {
         Debug.Log("End of Dialogue!");
+        for (int i = 0; i < choicePanel.transform.childCount; i++)
+        {
+            choicePanel.transform.GetChild(i).gameObject.SetActive(true);
+        }
+        controller.RelationUpdate();
+        namePlate.SetActive(false);
+        nametag.text = string.Empty;
+        message.text = string.Empty;
     }
 
     // Advance through the story 
     void AdvanceDialogue()
     {
-        string currentSentence = instance.story.Continue();
+        string currentSentence = story.Continue();
         ParseTags();
         StopAllCoroutines();
         StartCoroutine(TypeSentence(currentSentence));
@@ -93,14 +133,14 @@ public class DialogueManager : MonoBehaviour
         foreach (char letter in sentence.ToCharArray())
         {
             message.text += letter;
-            yield return null;
+            yield return new WaitForSeconds(0.02f);
         }
         /*CharacterScript tempSpeaker = GameObject.FindObjectOfType<CharacterScript>();
         if (tempSpeaker.isTalking)
         {
             SetAnimation("idle");
-        }
-        yield return null;*/
+        }*/
+        yield return null;
     }
 
     // Create then show the choices on the screen until one got selected
@@ -112,12 +152,14 @@ public class DialogueManager : MonoBehaviour
         for (int i = 0; i < _choices.Count; i++)
         {
             int index = i;
-            GameObject temp = Instantiate(choiceButon, choicePanel.transform.GetChild(0).transform);
+            GameObject temp = Instantiate(choiceButon, choicePanel.transform);
             temp.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = _choices[i].text;
             temp.GetComponent<Button>().onClick.AddListener(() => { SetDecision(index); });
+            /*if (_choices[i].text == "Leave")
+            {
+                temp.GetComponent<Button>().onClick.AddListener(() => { SetRelationship(int.Parse(story.state.variablesState["relationship"].ToString())); });
+            }*/
         }
-
-        choicePanel.SetActive(true);
 
         yield return new WaitUntil(() => { return choiceSelected != null; });
 
@@ -125,19 +167,21 @@ public class DialogueManager : MonoBehaviour
     }
 
     // Tells the story which branch to go to
-    public static void SetDecision(int index)
+    public void SetDecision(int index)
     {
         choiceSelected = index.ToString();
-        instance.story.ChooseChoiceIndex(index);
+        story.ChooseChoiceIndex(index);
     }
 
     // After a choice was made, turn off the panel and advance from that choice
     void AdvanceFromDecision()
     {
-        choicePanel.SetActive(false);
         for (int i = 0; i < choicePanel.transform.childCount; i++)
         {
-            Destroy(choicePanel.transform.GetChild(i).gameObject);
+            if (choicePanel.transform.GetChild(i).gameObject.activeSelf)
+            {
+                Destroy(choicePanel.transform.GetChild(i).gameObject);
+            }
         }
         choiceSelected = null; // Forgot to reset the choiceSelected. Otherwise, it would select an option without player intervention.
         AdvanceDialogue();
@@ -153,6 +197,7 @@ public class DialogueManager : MonoBehaviour
         {
             string prefix = t.Split(' ')[0];
             string param = t.Split(' ')[1];
+            string sub = t.Split(' ')[2];
 
             switch (prefix.ToLower())
             {
@@ -163,7 +208,13 @@ public class DialogueManager : MonoBehaviour
                     SetTextColor(param);
                     break;
                 case "name":
-                    SetSpeakerName(param);
+                    SetSpeakerName(param, sub);
+                    break;
+                case "relationship":
+                    SetRelationship(int.Parse(param));
+                    break;
+                case "quest":
+                    SetQuest(param);
                     break;
                 case "await":
                     AwaitInput(param);
@@ -198,18 +249,36 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    void SetSpeakerName(string _name)
+    void SetSpeakerName(string first, string last)
     {
-        if (_name != "null")
+        if (first != "null")
         {
-            namePlate.SetActive(true);
-            nametag.text = _name;
+            if (last != "null")
+            {
+                namePlate.SetActive(true);
+                nametag.text = first + " " + last;
+            }
+            else
+            {
+                namePlate.SetActive(true);
+                nametag.text = first;
+            }
         }
         else
         {
             namePlate.SetActive (false);
             nametag.text = "";
         }
+    }
+
+    public void SetRelationship(int amount)
+    {
+        controller.relationship += amount;
+    }
+
+    public void SetQuest(string type)
+    {
+
     }
 
     void AwaitInput(string _input)

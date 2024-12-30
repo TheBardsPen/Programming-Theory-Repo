@@ -3,6 +3,12 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Ink.Runtime;
+using System.Linq;
+using JetBrains.Annotations;
+using System;
+using System.Collections.Generic;
+using System.Collections;
 
 /// <summary>
 /// Handles user interaction on the game screen
@@ -22,12 +28,20 @@ public class GameUIHandler : MonoBehaviour
     // Gameobjects for main interactions
     [SerializeField] GameObject mainSplash;
     [SerializeField] GameObject exitConfirm;
+    [SerializeField] GameObject dialogueBox;
+    [SerializeField] GameObject choicePanel;
+    [SerializeField] GameObject[] defaultChoiceOptions;
 
     // Gameobjects for location display
     public TextMeshProUGUI location;
     public TextMeshProUGUI subLocation;
 
     // Gameobjects for player hotbar
+    [SerializeField] GameObject playerHotbar;
+    [SerializeField] GameObject battleLog;
+    public TextMeshProUGUI battleText;
+    private int maxLogLength = 10;
+    private bool isLogLimitMet;
     [SerializeField] TextMeshProUGUI hpText;
     [SerializeField] TextMeshProUGUI mpText;
     [SerializeField] Scrollbar hpBar;
@@ -61,10 +75,49 @@ public class GameUIHandler : MonoBehaviour
             instance = this;
         }
         DontDestroyOnLoad(gameObject);
+
+        // Set undeclared variables
+        battleText = battleLog.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>();
     }
 
     private void Update()
     {
+        // Grab location from datamanager
+        LocationObject currentLocation = DataManager.instance.currentLocation;
+
+        // Update hotbar and dialogue box based on location type
+        if (currentLocation != null)
+        {
+            if (currentLocation.type == LocationType.Town)
+            {
+                dialogueBox.SetActive(true);
+                choicePanel.SetActive(true);
+                playerHotbar.SetActive(false);
+                battleLog.SetActive(false);
+            }
+            else
+            {
+                dialogueBox.SetActive(false);
+                choicePanel.SetActive(false);
+                playerHotbar.SetActive(true);
+                battleLog.SetActive(true);
+            }
+        }
+
+        // Clear oldest battle log line at max
+        if (currentLocation != null && currentLocation.type == LocationType.Dungeon)
+        {
+            if (battleText.text.Split("\n").Length >= maxLogLength)
+            {
+                isLogLimitMet = true;
+            }
+        }
+        if (isLogLimitMet)
+        {
+            StartCoroutine(TrimLogLines());
+            isLogLimitMet = false;
+        }
+
         // Watch for player level up
         expToLevelUp = (((player.container.level * 9) * (player.container.level * 7)) - player.container.exp);
 
@@ -119,6 +172,35 @@ public class GameUIHandler : MonoBehaviour
 
             sidePanel.SetActive(true);
         }
+    }
+
+    public void StartDialogue()
+    {
+        /*foreach (GameObject obj in defaultChoiceOptions)
+        {
+            obj.SetActive(false);
+        }
+        Story story = new Story(GameObject.FindGameObjectWithTag("NPC").GetComponent<NPCController>().npc.story.text);
+        story.variablesState["relationship"] = GameObject.FindGameObjectWithTag("NPC").GetComponent<NPCController>().relationship;
+        story.variablesState["isQuestActive"] = GameObject.FindGameObjectWithTag("NPC").GetComponent<NPCController>().isQuestActive;
+        DialogueManager.instance.story = story;
+        DialogueManager.instance.StartDialogue();*/
+    }
+
+    public void EndDialogue()
+    {
+        foreach (GameObject obj in defaultChoiceOptions)
+        {
+            obj.SetActive(true);
+        }
+    }
+
+    private IEnumerator TrimLogLines()
+    {
+        string[] logLines = battleText.text.Split("\n").Skip(1).ToArray();
+        string output = string.Join("\n", logLines);
+        battleText.text = output;
+        yield return null;
     }
 
     public void PlayerLevelUp()

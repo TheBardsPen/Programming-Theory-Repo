@@ -30,7 +30,7 @@ public class TitleUIHandler : MonoBehaviour
     public void NewGame()
     {
         // Code to launch character creation scene
-        SceneManager.LoadScene("CharacterCreation (ink test");
+        SceneManager.LoadScene("CharacterCreation");
     }
 
     public void Continue()
@@ -85,6 +85,6 @@ public class TitleUIHandler : MonoBehaviour
     public void DebugLoad()
     {
         DataManager.instance.Load("Debug");
-        SceneManager.LoadScene("Town");
+        SceneManager.LoadScene("Test Town Inn");
     }
 }

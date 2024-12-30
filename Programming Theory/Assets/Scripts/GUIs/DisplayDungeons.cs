@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DisplayDungeons : MonoBehaviour
 {
@@ -45,14 +46,17 @@ public class DisplayDungeons : MonoBehaviour
         List<DungeonSlot> sortedList = inventory.container.OrderBy(o => o.dungeon.level).ToList();
         for (int i = 0; i < sortedList.Count; i++)
         {
-            var name = sortedList[i].dungeon.name;
-            var level = sortedList[i].dungeon.level;
-            var obj = Instantiate(sortedList[i].dungeon.prefabButton, Vector3.zero, Quaternion.identity, transform);
+            var dungeon = sortedList[i].dungeon;
+            var name = dungeon.name;
+            var level = dungeon.level;
+            var obj = Instantiate(dungeon.prefabButton, Vector3.zero, Quaternion.identity, transform);
             obj.GetComponent<RectTransform>().localPosition = GetPosition(i);
             obj.GetComponentInChildren<TextMeshProUGUI>().text = name + " LV " + level;
             obj.GetComponent<Button>().onClick.AddListener(delegate { GameUIHandler.instance.UpdateLocation(name, $"Lv {level} Dungeon"); });
             obj.GetComponent<Button>().onClick.AddListener(delegate { GameUIHandler.instance.SplashSelect(splash); });
-            if (sortedList[i].dungeon.name == GameUIHandler.instance.location.text)
+            obj.GetComponent<Button>().onClick.AddListener(() => DataManager.instance.currentLocation = dungeon);
+            obj.GetComponent<Button>().onClick.AddListener(delegate { SceneManager.LoadScene(name); });
+            if (dungeon.name == GameUIHandler.instance.location.text)
             {
                 obj.GetComponent<Button>().interactable = false;
             }

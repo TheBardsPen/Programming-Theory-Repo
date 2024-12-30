@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6830948ca831d194ca53f365537e21dd, type: 3}
-  m_Name: Dungeon 1
+  m_Script: {fileID: 11500000, guid: b09ee736152b4fd4d9c6c101c45a49ae, type: 3}
+  m_Name: NPC Relations
   m_EditorClassIdentifier: 
-  prefabButton: {fileID: 5762828437494737137, guid: 0a3cb6dd90bc3e6498a07d99890bbf9b, type: 3}
-  type: 1
-  description: 
+  container: []

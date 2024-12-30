@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6830948ca831d194ca53f365537e21dd, type: 3}
+  m_Name: Test Dungeon
+  m_EditorClassIdentifier: 
+  prefabButton: {fileID: 5762828437494737137, guid: 0a3cb6dd90bc3e6498a07d99890bbf9b, type: 3}
+  type: 1
+  description: This is a test dungeon for combat.
+  level: 1
+  enemyList:
+  - {fileID: 6250632803154481854, guid: a322cff0b26f3f44e88183193c6f128d, type: 3}
+  - {fileID: 543394747177983528, guid: 336708304137b294aa0db77a377500c5, type: 3}

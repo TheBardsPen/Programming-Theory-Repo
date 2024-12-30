@@ -3,6 +3,7 @@ using TMPro;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DisplaySubLocations : MonoBehaviour
@@ -55,25 +56,36 @@ public class DisplaySubLocations : MonoBehaviour
             // Create buttons from indexed town
             for (int i = 0; i < inventory.container[townIndex].town.subLocations.Count; i++)
             {
-                GameObject obj = Instantiate(inventory.container[townIndex].town.prefabButton, Vector3.zero, Quaternion.identity, transform.parent);
+                TownObject town = inventory.container[townIndex].town;
+                string subName = town.subLocations[i];
+
+                GameObject obj = Instantiate(town.prefabButton, Vector3.zero, Quaternion.identity, transform.parent);
                 obj.GetComponent<RectTransform>().localPosition = GetSubPosition(i);
+
                 // Check if sublocation has been discovered
-                if (inventory.container[townIndex].subLocations.Contains(inventory.container[townIndex].town.subLocations[i]))
+                if (inventory.container[townIndex].subLocations.Contains(subName))
                 {
-                    obj.GetComponentInChildren<TextMeshProUGUI>().text = inventory.container[townIndex].town.subLocations[i];
+                    obj.GetComponentInChildren<TextMeshProUGUI>().text = subName;
                 }
                 else
                 {
                     obj.GetComponentInChildren<TextMeshProUGUI>().text = "?????";
                     obj.GetComponent<Button>().interactable = false;
                 }
+
+                // Add listeners
                 obj.GetComponent<Button>().onClick.AddListener(delegate { GameUIHandler.instance.UpdateLocation(DisplayTowns.instance.townSelected, obj.GetComponentInChildren<TextMeshProUGUI>().text); });
                 obj.GetComponent<Button>().onClick.AddListener(delegate { GameUIHandler.instance.SplashSelect(splash); });
+                obj.GetComponent<Button>().onClick.AddListener(delegate { DataManager.instance.currentLocation = town; });
+                obj.GetComponent<Button>().onClick.AddListener(() => SceneManager.LoadScene($"{townName} {subName}"));
+
                 // Check if location is current
-                if (inventory.container[townIndex].town.subLocations[i] == GameUIHandler.instance.subLocation.text && inventory.container[townIndex].town.name == GameUIHandler.instance.location.text)
+                if (town.subLocations[i] == GameUIHandler.instance.subLocation.text && town.name == GameUIHandler.instance.location.text)
                 {
                     obj.GetComponent<Button>().interactable = false;
                 }
+
+                // Add to list for dynamic updating
                 DisplayTowns.instance.subButtons.Add(obj);
             }
         }

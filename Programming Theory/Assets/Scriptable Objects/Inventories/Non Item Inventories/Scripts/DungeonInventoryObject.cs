@@ -15,7 +15,7 @@ public class DungeonInventoryObject : ScriptableObject, ISerializationCallbackRe
 #if UNITY_EDITOR
         database = (DungeonDatabaseObject)AssetDatabase.LoadAssetAtPath("Assets/Resources/Dungeon Database.asset", typeof(DungeonDatabaseObject));
 #else
-        database = Resources.Load<TownDatabaseObject>("Dungeon Database");
+        database = Resources.Load<DungeonDatabaseObject>("Dungeon Database");
 #endif
     }
 

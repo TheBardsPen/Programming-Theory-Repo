@@ -15,7 +15,7 @@ public class MainQuestInventoryObject : ScriptableObject, ISerializationCallback
 #if UNITY_EDITOR
         database = (MainQuestDatabaseObject)AssetDatabase.LoadAssetAtPath("Assets/Resources/Main Quest Database.asset", typeof(MainQuestDatabaseObject));
 #else
-        database = Resources.Load<TownDatabaseObject>("Main Quest Database");
+        database = Resources.Load<MainQuestDatabaseObject>("Main Quest Database");
 #endif
     }
 

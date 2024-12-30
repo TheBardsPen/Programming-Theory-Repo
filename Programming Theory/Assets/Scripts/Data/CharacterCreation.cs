@@ -16,25 +16,30 @@ public class CharacterCreation : MonoBehaviour
 
     private void Start()
     {
-        DialogueManager.instance.story = new Story(inkFile.text);
+        DialogueManagerNewGame.instance.story = new Story(inkFile.text);
+        DialogueManagerNewGame.instance.StartDialogue();
     }
 
     private void Update()
     {
-        if (!DialogueManager.instance.story.canContinue)
+        if (DialogueManagerNewGame.instance.story != null)
         {
-            if (DialogueManager.instance.story.currentChoices.Count == 0)
+            if (!DialogueManagerNewGame.instance.story.canContinue)
             {
-                player.SetClass(DialogueManager.instance.story.variablesState["player_class"].ToString(), DialogueManager.instance.story.variablesState["player_name"].ToString());
-                StartCoroutine(Continue());
+                if (DialogueManagerNewGame.instance.story.currentChoices.Count == 0)
+                {
+                    player.SetClass(DialogueManagerNewGame.instance.story.variablesState["player_class"].ToString(), DialogueManagerNewGame.instance.story.variablesState["player_name"].ToString());
+                    StartCoroutine(Continue());
+                }
             }
         }
+        
     }
 
     public IEnumerator Continue()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(3);
         // Start the game with selected class and name
-        SceneManager.LoadScene("Town");
+        SceneManager.LoadScene("New Game");
     }
 }

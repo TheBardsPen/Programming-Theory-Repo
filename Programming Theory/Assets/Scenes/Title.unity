@@ -234,6 +234,7 @@ MonoBehaviour:
   dungeonInventory: {fileID: 11400000, guid: 890a596c6065efa4d8957c346f8ec2bd, type: 2}
   mainQuestInventory: {fileID: 11400000, guid: 2a40f8a71b5462c4a8ff1afe8cefb9d2, type: 2}
   sideQuestInventory: {fileID: 11400000, guid: e811955099e72f646acf0a72d544b1d8, type: 2}
+  npcRelations: {fileID: 11400000, guid: 7099b66b56b08d3429c0c006a5864103, type: 2}
 --- !u!4 &102326263
 Transform:
   m_ObjectHideFlags: 0

@@ -9,15 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5520051c3f82f94eb6e747c8c7e71cf, type: 3}
-  m_Name: Town 1
+  m_Script: {fileID: 11500000, guid: f28c31d36c8a76a429c0ad1e144b74fe, type: 3}
+  m_Name: Test NPC
   m_EditorClassIdentifier: 
-  prefabButton: {fileID: 5762828437494737137, guid: 0a3cb6dd90bc3e6498a07d99890bbf9b, type: 3}
-  type: 0
+  npcName: Test NPC
+  story: {fileID: 4900000, guid: 6f0dc82728456134587a3af18a902b97, type: 3}
   description: 
-  subLocations:
-  - Shop
-  - Inn
-  - Arena
-  - Governor
-  - Brothel
